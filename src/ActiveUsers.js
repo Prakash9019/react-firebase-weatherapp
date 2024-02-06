@@ -123,7 +123,7 @@ function ActiveUsers() {
         />
       </div>
       <h1 style={{textAlign:'center'}}>Active Users</h1>
-      <table>
+      <table >
         <thead>
           <tr>
             <th>Username</th>

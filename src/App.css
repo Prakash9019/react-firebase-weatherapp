@@ -160,3 +160,12 @@ table{
   background-color: rgba(255,255,255, 0.2);
 }
 
+table {
+  border: 2px solid forestgreen;
+  /* width: 800px;
+  height: 200px; */
+}
+
+td{
+  align-items: center;
+}
