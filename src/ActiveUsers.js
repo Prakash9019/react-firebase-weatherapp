@@ -1,6 +1,8 @@
 // ActiveUsers.js
 import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
 import { db, auth, storage } from "./config/firebase";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   getDocs,
   collection,
@@ -12,11 +14,18 @@ import {
 
 function ActiveUsers() {
   const [activeUsers, setActiveUsers] = useState([]);
-  const handleDelete=(e)=>{
-    console.log(e);
+  const [sortByDate, setSortByDate] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDelete=async (user)=>{
+    const movieDoc = doc(db, "Users", user.id);
+     await updateDoc(movieDoc, { status : false });
+     window.location.reload();
   }
-  const handleChangeStatus=(e)=>{
-    console.log(e);
+  const handleAdd=async (user)=>{
+    const movieDoc = doc(db, "Users", user.id);
+    await updateDoc(movieDoc, { status : true });
+    window.location.reload();
   }
 
   useEffect(() => {
@@ -27,10 +36,14 @@ function ActiveUsers() {
     try {
       const data = await getDocs(info);
       console.log(data);
-      const filteredData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const filteredData = data.docs.map((doc) => {
+        const Dats={
+        ...doc.data(),id: doc.id,
+      }
+      Dats.addeddate=new Date(Dats.date);
+      return Dats;
+    });
+    // console.log("hellllooooooo")
       console.log(filteredData);
       setActiveUsers(filteredData);
     } catch (err) {
@@ -41,8 +54,61 @@ function ActiveUsers() {
     fetchData();
   }, []);
 
+  
+  useEffect(() => {
+    console.log(sortByDate);
+        console.log("function is caledddddddddddd.....")
+    const fetchData = async () => {
+      const info = collection(db, "Users");
+      console.log(info);
+      try {
+        const data = await getDocs(info);
+        console.log(data);
+        const filteredData = data.docs.map((doc) => {
+          const Dats={
+          ...doc.data(),id: doc.id,
+        }
+        Dats.addeddate=new Date(Dats.date);
+        return Dats;
+      });
+      // console.log("hellllooooooo")
+      if(selectedDate){
+        
+      }
+        if (sortByDate) {
+          // console.log()
+          filteredData.sort((a, b) => a.addeddate - b.addeddate);
+          console.log("the sorted data ");
+          console.log(filteredData);
+        }
+        setActiveUsers(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+       }
+  
+      fetchData();
+    }, [sortByDate, selectedDate]);
+
   return (
     <div>
+       <div>
+        <label htmlFor="sortOption">Sort By Date:</label>
+        <select id="sortOption" value={sortByDate} onChange={(e) => setSortByDate(e.target.value)}>
+          <option value={false}>None</option>
+          <option value={true}>Sort By Date</option>
+        </select>
+      </div>
+      <div>
+        <label htmlFor="datePicker">Filter By Date:</label>
+        <DatePicker
+          id="datePicker"
+          selected={selectedDate}
+          onChange={date => setSelectedDate(date)}
+          dateFormat="yyyy-MM-dd"
+          isClearable
+        />
+      </div>
       <h1>Active Users</h1>
       <table>
         <thead>
@@ -61,9 +127,9 @@ function ActiveUsers() {
               <td><input
              type="checkbox"
              checked={user.status} /></td>
-              <td >
-                <button className="hello" onClick={() => handleDelete(user.id)}>Delete</button>
-                <button className="hello" onClick={() => handleChangeStatus(user.id)}>Add</button>
+              <td style={ {display: "flex", justifyItems: "space-evenly"}}>
+                <button className="hello" onClick={() => handleDelete(user)}>Delete</button>
+                <button className="hello" onClick={() => handleAdd(user)}>Add</button>
               </td>
             </tr>
           ))}

@@ -22,7 +22,7 @@ input {
   border-radius: 5px;
   border: 1px solid #ccc;
 }
-button {
+.form-container button {
   width: 100%;
   padding: 10px;
   border-radius: 5px;
@@ -42,10 +42,16 @@ button:hover {
   vertical-align: top;
   width: 80px;
   height: 40px;
+  padding: 10px;
   /* line-height: 30px; */
-  background: gray;
-  margin: 0 4px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
   text-align: center;
+  margin-left: 12px;
 }
 
 table{
@@ -75,8 +81,11 @@ table{
 }
 
 .app .search {
+  display: flex;
+  
   text-align: center;
   padding: 1rem;
+  width: 100%;
 }
 
 .app input {
@@ -85,16 +94,16 @@ table{
   border-radius: 25px;
   border: 1px solid rgba(255,255,255, 0.8);
   background: rgba(255,255,255, 0.1);
-  color: #f8f8f8;
+  /* color: #f8f8f8; */
 }
 
-::placeholder {
+/* ::placeholder {
   color: #f8f8f8;
-}
+} */
 
 .wcontainer {
   max-width: 700px;
-  height: 700px;
+  height: 70vh;
   margin: auto;
   padding: 0 1rem;
   position: relative;
@@ -102,6 +111,7 @@ table{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background-color: rgba(255,255,255, 0.2);
 }
 
 .app .top {
@@ -122,11 +132,18 @@ table{
   text-align: center;
   width: 100%;
   margin: 1rem auto;
-  padding: 1rem;
   border-radius: 12px;
   background-color: rgba(255,255,255, 0.2);
 }
 
 .bold {
   font-weight: 700;
+}
+
+.active{
+  background-color: rgba(255,255,255, 0.2);
+  border-radius: 10px;
+}
+.active:hover{
+  background-color: #ccc;
 }

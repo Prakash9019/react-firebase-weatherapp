@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function Homepage() {
     const [data, setData] = useState({})
     const [location, setLocation] = useState('')
-  
+    const navigate=useNavigate();
   //  const url = `https://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=fa2fd60c4d5e235a9ae25b09e7a8eae1`
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=fa2fd60c4d5e235a9ae25b09e7a8eae1`
     const searchLocation = (event) => {
@@ -16,6 +17,9 @@ function Homepage() {
         setLocation('')
       }
     }
+    const click=()=>{
+      navigate('/activeusers')
+    }
   
     return (
       <div className="app">
@@ -26,6 +30,7 @@ function Homepage() {
             onKeyPress={searchLocation}
             placeholder='Enter Location'
             type="text" />
+            <button className='active' onClick={click}style={{margin:"0 10vh"}}> ActiveUsers</button>
         </div>
         <div className="wcontainer">
           <div className="top">
@@ -35,7 +40,7 @@ function Homepage() {
             <div className="temp">
               {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
             </div>
-            <div className="description">
+            <div className="temp"style={{fontSize:"34px"}}>
               {data.weather ? <p>{data.weather[0].main}</p> : null}
             </div>
           </div>
