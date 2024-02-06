@@ -14,6 +14,7 @@ import {
 
 function ActiveUsers() {
   const [activeUsers, setActiveUsers] = useState([]);
+  const [activeUser, setActiveUser] = useState([]);
   const [sortByDate, setSortByDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
 
@@ -56,32 +57,44 @@ function ActiveUsers() {
 
   
   useEffect(() => {
-    console.log(sortByDate);
+    console.log(selectedDate);
         console.log("function is caledddddddddddd.....")
     const fetchData = async () => {
       const info = collection(db, "Users");
-      console.log(info);
+    //  console.log(info);
       try {
+    
         const data = await getDocs(info);
-        console.log(data);
+      //  console.log(data);
         const filteredData = data.docs.map((doc) => {
           const Dats={
           ...doc.data(),id: doc.id,
         }
         Dats.addeddate=new Date(Dats.date);
+      //  console.log(Dats.addeddate);
         return Dats;
       });
-      // console.log("hellllooooooo")
-      if(selectedDate){
+     
+      if (selectedDate) {
+         console.log("hellllooooooo");
+        const newDate= filteredData.map(data =>{
+          if(data.addeddate.toDateString() == selectedDate.toDateString()){
+            return data;
+          }
+        })
         
+        console.log(newDate);
+          setActiveUsers(newDate);
       }
+
         if (sortByDate) {
           // console.log()
           filteredData.sort((a, b) => a.addeddate - b.addeddate);
           console.log("the sorted data ");
           console.log(filteredData);
+          setActiveUsers(filteredData);
         }
-        setActiveUsers(filteredData);
+       
       } catch (err) {
         console.error(err);
       }
@@ -91,7 +104,7 @@ function ActiveUsers() {
     }, [sortByDate, selectedDate]);
 
   return (
-    <div>
+    <div className='acontainer'>
        <div>
         <label htmlFor="sortOption">Sort By Date:</label>
         <select id="sortOption" value={sortByDate} onChange={(e) => setSortByDate(e.target.value)}>
@@ -109,7 +122,7 @@ function ActiveUsers() {
           isClearable
         />
       </div>
-      <h1>Active Users</h1>
+      <h1 style={{textAlign:'center'}}>Active Users</h1>
       <table>
         <thead>
           <tr>
@@ -121,7 +134,9 @@ function ActiveUsers() {
         </thead>
         <tbody>
           {activeUsers.map(user => (
-            <tr key={user.id}>
+            //  {if(user){
+              user && (
+              <tr key={user.id}>
               <td>{user.Username}</td>
               <td>{user.date}</td>
               <td><input
@@ -131,8 +146,9 @@ function ActiveUsers() {
                 <button className="hello" onClick={() => handleDelete(user)}>Delete</button>
                 <button className="hello" onClick={() => handleAdd(user)}>Add</button>
               </td>
-            </tr>
-          ))}
+            </tr>)
+            //  }}
+     ))}
         </tbody>
       </table>
     </div>
